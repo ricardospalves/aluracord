@@ -4,6 +4,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 
+import { Button } from '../components/Button'
 import SETTINGS from '../../settings.json'
 
 const Home: NextPage = () => {
@@ -68,11 +69,9 @@ const Home: NextPage = () => {
               autoFocus
             />
 
-            <button
-              className="block w-full h-12 rounded mt-2 bg-green-700 focus:outline-none ring-sky-500/75 focus-visible:ring transition focus:bg-green-900 hover:bg-green-900"
-            >
+            <Button className="mt-2" variants="primary" full>
               Entrar
-            </button>
+            </Button>
           </form>
 
           <figure
