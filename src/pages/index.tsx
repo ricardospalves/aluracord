@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 
 import { Button } from '../components/Button'
+import { Input } from '../components/Input'
 import SETTINGS from '../../settings.json'
 
 const Home: NextPage = () => {
@@ -60,13 +61,13 @@ const Home: NextPage = () => {
               Nome de usuário no GitHub
             </label>
 
-            <input
+            <Input
               type="text"
               id="fieldUsername"
               value={username}
               onChange={handleInputChange}
-              className="block w-full px-2 h-12 bg-transparent border rounded ring-sky-500/75 focus-visible:outline-none focus:ring"
               autoFocus
+              full
             />
 
             <Button className="mt-2" variants="primary" full>
