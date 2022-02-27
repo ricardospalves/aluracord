@@ -24,6 +24,11 @@ export const VARIANTS = {
     'focus-visible:bg-green-900',
     'hover:bg-green-900',
   ],
+  danger: [
+    'bg-red-700',
+    'focus-visible:bg-red-900',
+    'hover:bg-red-900',
+  ]
 }
 
 export type Variants = keyof typeof VARIANTS
