@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, TextareaHTMLAttributes } from 'react'
+import { forwardRef, InputHTMLAttributes, TextareaHTMLAttributes } from 'react'
 import classNames from 'classnames'
 
 import { BASE, FULL, TEXTAREA, INPUT, Resize, RESIZE } from './styles'
@@ -10,11 +10,16 @@ interface BaseProps {
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement>, BaseProps {}
 
-interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement>, BaseProps {
-  resize?: Resize
-}
+interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement>,
+  BaseProps {
+    resize?: Resize
+  }
 
-export const Input = ({ className, full, ...props }: InputProps) => {
+export const Input = forwardRef<HTMLInputElement, InputProps>(({
+  className,
+  full,
+  ...props
+}, ref) => {
   return (
     <input
       className={classNames([
@@ -23,17 +28,20 @@ export const Input = ({ className, full, ...props }: InputProps) => {
         className,
         full && FULL,
       ])}
+      ref={ref}
       {...props}
     />
   )
-}
+})
 
-export const Textarea = ({
+Input.displayName = 'Input'
+
+export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(({
   className,
   full,
   resize = 'both',
   ...props
-}: TextareaProps) => {
+}, ref) => {
   return (
     <textarea
       className={classNames([
@@ -43,7 +51,10 @@ export const Textarea = ({
         full && FULL,
         resize && RESIZE[resize]
       ])}
+      ref={ref}
       {...props}
     />
   )
-}
+})
+
+Textarea.displayName = 'Textarea'
