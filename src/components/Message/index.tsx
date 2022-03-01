@@ -1,42 +1,31 @@
 import Image from 'next/image'
-import classNames from 'classnames'
 
 export type MessageProps = {
   id: string
-  avatarUrl: string
-  name: string
-  createdAt: string
+  username: string
+  created_at: string
   message: string
-  className?: string
-  borderBottom?: boolean
 }
 
 export const Message = ({
   id,
-  avatarUrl,
-  name,
-  createdAt,
+  username,
+  created_at,
   message,
-  className,
-  borderBottom,
 }: MessageProps) => {
   return (
     <li
       id={id}
-      className={classNames([
-        className,
-        'flex items-start px-4 py-2',
-        borderBottom && 'border-b border-black/50'
-      ])}
+      className='flex items-start px-4 py-2 border-b border-black/50'
     >
       <span
         className="block flex-shrink-0"
       >
         <Image
-          src={avatarUrl}
+          src={`https://github.com/${username}.png`}
           width={48}
           height={48}
-          alt={`Avatar de ${name}`}
+          alt={`Avatar de ${username}`}
           className="block"
         />
       </span>
@@ -47,13 +36,13 @@ export const Message = ({
         <span
           className="block break-words font-bold pr-4"
         >
-          {name}
+          {username}
         </span>
 
         <span
           className="text-sm text-gray-400"
         >
-          {createdAt}
+          {created_at}
         </span>
 
         <span

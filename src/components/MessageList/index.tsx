@@ -16,15 +16,13 @@ export const MessageList = ({ messages, className }: Props) => {
         className,
       ])}
     >
-      {messages?.map((message, index) => (
+      {messages?.map((message) => (
         <Message
           key={message.id}
           id={message.id}
-          avatarUrl={message.avatarUrl}
-          name={message.name}
-          createdAt={message.createdAt}
+          username={message.username}
+          created_at={message.created_at}
           message={message.message}
-          borderBottom={true}
         />
       ))}
     </ul>

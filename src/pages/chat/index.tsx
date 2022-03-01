@@ -1,8 +1,8 @@
-import { ChangeEvent, FormEvent, useRef, useState } from 'react'
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { MdSend } from 'react-icons/md'
-import { format } from 'date-fns'
+import { createClient } from '@supabase/supabase-js'
 
 import SETTINGS from '../../../settings.json'
 
@@ -13,33 +13,44 @@ import { MessageList } from '../../components/MessageList'
 
 type MessageList = Array<MessageProps>
 
+const supabaseClient = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL as string,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
+)
+
 const SEND_MESSAGE_TEXT = 'Enviar a mensagem'
 
 const Chat: NextPage = () => {
   const formRef = useRef<HTMLFormElement>(null)
   const messageRef = useRef<HTMLTextAreaElement>(null)
   const [message, setMessage] = useState('')
-  const [messageList, setMessageList] = useState<MessageList>([
-    {
-      id: '1',
-      avatarUrl: 'https://github.com/ricardospalves.png',
-      name: 'Ricardo Alves',
-      createdAt: format(new Date(2021), `dd/MM/yyyy 'às' hh:mm`),
-      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ac ante vitae turpis semper convallis.',
-    },
-    {
-      id: '2',
-      avatarUrl: 'https://github.com/omariosouto.png',
-      name: 'Mario Souto',
-      createdAt: format(new Date(2022), `dd/MM/yyyy 'às' hh:mm`),
-      message: 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.',
-    },
-  ])
+  const [messageList, setMessageList] = useState<MessageList>([])
+
+  const addMessageToList = (message: string) => {
+    const newMessage: Omit<MessageProps, 'id' | 'created_at'> = {
+      message: message,
+      username: 'ricardospalves',
+    }
+
+    supabaseClient
+      .from('messages')
+      .insert(newMessage)
+      .then(({ data }) => {
+        if(data) {
+          setMessageList(previous => ([
+            ...previous,
+            data[0]
+          ]))
+        }
+      })
+
+    setMessage('')
+  }
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
 
-    setMessage('')
+    addMessageToList(message)
     messageRef.current?.focus()
   }
 
@@ -48,6 +59,15 @@ const Chat: NextPage = () => {
 
     setMessage(value)
   }
+
+  useEffect(() => {
+    supabaseClient
+      .from('messages')
+      .select('*')
+      .then(({ data }) => {
+        setMessageList(data || [])
+      })
+  }, [])
 
   return (
     <>
