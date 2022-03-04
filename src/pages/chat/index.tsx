@@ -1,6 +1,7 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import { MdSend } from 'react-icons/md'
 import { createClient } from '@supabase/supabase-js'
 
@@ -10,6 +11,7 @@ import { Button } from '../../components/Button'
 import { Textarea } from '../../components/Input'
 import { MessageProps } from '../../components/Message'
 import { MessageList } from '../../components/MessageList'
+import { Stickers } from '../../components/Stickers'
 
 type MessageList = Array<MessageProps>
 
@@ -25,11 +27,13 @@ const Chat: NextPage = () => {
   const messageRef = useRef<HTMLTextAreaElement>(null)
   const [message, setMessage] = useState('')
   const [messageList, setMessageList] = useState<MessageList>([])
+  const router = useRouter()
 
   const addMessageToList = (message: string) => {
+    const username = router.query.username as string
     const newMessage: Omit<MessageProps, 'id' | 'created_at'> = {
       message: message,
-      username: 'ricardospalves',
+      username,
     }
 
     supabaseClient
@@ -124,16 +128,26 @@ const Chat: NextPage = () => {
             Escreva sua mensagem
           </label>
 
-          <Textarea
-            id="fieldMessage"
-            className="flex-grow mr-2 flex-shrink min-w-0"
-            placeholder="Escreva sua mensagem"
-            resize="none"
-            value={message}
-            onChange={handleMessageChange}
-            ref={messageRef}
-            autoFocus
-          />
+          <div className="flex-grow mr-2 flex-shrink min-w-0 relative">
+            <Stickers
+              className="absolute t-0 l-0"
+              onStickerClick={(sticker) => {
+                addMessageToList(`:sticker: ${sticker}`)
+              }}
+            />
+
+            <Textarea
+              id="fieldMessage"
+              placeholder="Escreva sua mensagem"
+              className="pl-9"
+              resize="none"
+              value={message}
+              onChange={handleMessageChange}
+              ref={messageRef}
+              full
+              autoFocus
+            />
+          </div>
 
           <Button
             className="flex-shrink-0"

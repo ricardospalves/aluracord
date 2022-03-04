@@ -48,7 +48,18 @@ export const Message = ({
         <span
           className="flex-grow flex-shrink-0 w-full"
         >
-          {message}
+          {message.startsWith(':sticker:')
+            ? (
+              <Image
+                src={message.replace(/:sticker: /, '')}
+                width={150}
+                height={150}
+                alt="Figurinha"
+              />
+            )
+            : (
+              message
+            )}
         </span>
       </span>
     </li>
