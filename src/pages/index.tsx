@@ -15,7 +15,7 @@ const Home: NextPage = () => {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
 
-    router.push('/chat')
+    router.push(`/chat?username=${username}`)
   }
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
