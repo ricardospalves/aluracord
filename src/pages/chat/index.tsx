@@ -3,10 +3,9 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { MdSend } from 'react-icons/md'
-import { createClient } from '@supabase/supabase-js'
 
 import SETTINGS from '../../../settings.json'
-
+import { supabaseClient } from '../../services/client'
 import { Button } from '../../components/Button'
 import { Textarea } from '../../components/Input'
 import { MessageProps } from '../../components/Message'
@@ -14,11 +13,6 @@ import { MessageList } from '../../components/MessageList'
 import { Stickers } from '../../components/Stickers'
 
 type MessageList = Array<MessageProps>
-
-const supabaseClient = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL as string,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
-)
 
 const SEND_MESSAGE_TEXT = 'Enviar a mensagem'
 
