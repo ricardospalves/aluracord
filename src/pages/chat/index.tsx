@@ -29,7 +29,7 @@ const Chat: NextPage = () => {
   const [messageList, setMessageList] = useState<MessageList>([])
   const router = useRouter()
 
-  const addMessageToList = (message: string) => {
+  const insertMessage = (message: string) => {
     const username = router.query.username as string
     const newMessage: Omit<MessageProps, 'id' | 'created_at'> = {
       message: message,
@@ -39,14 +39,7 @@ const Chat: NextPage = () => {
     supabaseClient
       .from('messages')
       .insert(newMessage)
-      .then(({ data }) => {
-        if(data) {
-          setMessageList(previous => ([
-            ...previous,
-            data[0]
-          ]))
-        }
-      })
+      .then()
 
     setMessage('')
   }
@@ -54,7 +47,7 @@ const Chat: NextPage = () => {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
 
-    addMessageToList(message)
+    insertMessage(message)
     messageRef.current?.focus()
   }
 
@@ -65,12 +58,30 @@ const Chat: NextPage = () => {
   }
 
   useEffect(() => {
-    supabaseClient
+    const supabaseSelect = supabaseClient
       .from('messages')
       .select('*')
       .then(({ data }) => {
         setMessageList(data || [])
       })
+
+    const supabaseListener = supabaseClient
+      .from('messages')
+      .on('INSERT', (response) => {
+        setMessageList(previous => {
+          return [
+            ...previous,
+            response.new
+          ]
+        })
+      })
+      .subscribe()
+
+    const cleanUp = () => {
+      supabaseListener.unsubscribe()
+    }
+
+    return cleanUp
   }, [])
 
   return (
@@ -132,7 +143,7 @@ const Chat: NextPage = () => {
             <Stickers
               className="absolute t-0 l-0"
               onStickerClick={(sticker) => {
-                addMessageToList(`:sticker: ${sticker}`)
+                insertMessage(`:sticker: ${sticker}`)
               }}
             />
 
