@@ -130,7 +130,7 @@ const Chat: NextPage = () => {
           {loading && (
             <Loader
               className="absolute inset-0 m-auto"
-              title="Carregando as mensagens, por favorm aguarde."
+              title="Carregando as mensagens, por favor, aguarde."
             />
           )}
 
