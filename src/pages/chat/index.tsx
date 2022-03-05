@@ -11,6 +11,7 @@ import { Textarea } from '../../components/Input'
 import { MessageProps } from '../../components/Message'
 import { MessageList } from '../../components/MessageList'
 import { Stickers } from '../../components/Stickers'
+import { Loader } from '../../components/Loader'
 
 type MessageList = Array<MessageProps>
 
@@ -21,6 +22,7 @@ const Chat: NextPage = () => {
   const messageRef = useRef<HTMLTextAreaElement>(null)
   const [message, setMessage] = useState('')
   const [messageList, setMessageList] = useState<MessageList>([])
+  const [loading, setLoading] = useState(true)
   const router = useRouter()
 
   const insertMessage = (message: string) => {
@@ -56,7 +58,10 @@ const Chat: NextPage = () => {
       .from('messages')
       .select('*')
       .then(({ data }) => {
-        setMessageList(data || [])
+        if(data && data?.length) {
+          setMessageList(data)
+          setLoading(false)
+        }
       })
 
     const supabaseListener = supabaseClient
@@ -120,8 +125,15 @@ const Chat: NextPage = () => {
         </header>
 
         <article
-          className="flex-grow min-h-0 overflow-auto max-h-[calc(100vh-(58px+112px))]"
+          className="flex-grow min-h-0 overflow-auto max-h-[calc(100vh-(58px+112px))] relative"
         >
+          {loading && (
+            <Loader
+              className="absolute inset-0 m-auto"
+              title="Carregando as mensagens, por favorm aguarde."
+            />
+          )}
+
           <MessageList
             messages={messageList}
           />
