@@ -1,7 +1,5 @@
 # Aluracord
 
-**🚧 ESTE PROJETO ESTÁ EM CONSTRUÇÃO 🚧**
-
 Projeto criado na **Imersão React** da [@alura](https://github.com/alura) com o [@omariosouto](https://github.com/omariosouto) e o [@peas](https://github.com/peas).
 
 Este projeto está usando o [Next.js](https://nextjs.org/).
