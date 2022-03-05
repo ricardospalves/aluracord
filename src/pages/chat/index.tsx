@@ -104,10 +104,16 @@ const Chat: NextPage = () => {
         >
           <h1
             className="flex-shrink-0 uppercase font-bold"
-          >Chat</h1>
+          >
+            Chat
+          </h1>
 
           <Button
+            type="button"
             variants="danger"
+            onClick={() => {
+              router.push('/')
+            }}
           >
             Sair
           </Button>
